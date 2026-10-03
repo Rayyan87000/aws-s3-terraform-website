@@ -1,33 +1,46 @@
 ☁️ AWS S3 Static Website Deployment with Terraform
 <p align="center">
-  <strong>Automated Static Website Hosting on AWS using Terraform (Infrastructure as Code)</strong>
+  <strong>Automated Static Website Hosting on AWS using Infrastructure as Code</strong>
 </p>
 
 <p align="center">
   <a href="http://rayyan-cloud-website-2026.s3-website.ap-south-1.amazonaws.com/">🌐 Live Demo</a>
-  •
-  <a href="https://github.com/Rayyan87000/aws-s3-terraform-website">💻 GitHub Repository</a>
+  &nbsp;&nbsp;•&nbsp;&nbsp;
+  <a href="https://github.com/Rayyan87000/aws-s3-terraform-website">💻 GitHub</a>
 </p>
 
-📌 About the Project
-This project demonstrates how to deploy a static HTML/CSS website to Amazon S3 and manage the AWS infrastructure using Terraform.
-The project started with a simple static website and was then converted into an Infrastructure as Code (IaC) deployment. Instead of manually configuring the S3 bucket every time, Terraform defines the required AWS resources and configuration in code.
-What this project does
-- Creates/manages an Amazon S3 bucket
-- Configures the bucket for static website hosting
-- Configures public access settings required for this learning deployment
-- Creates a bucket policy for public website content
-- Uploads index.html and style.css automatically
-- Generates the website endpoint as a Terraform output
-- Keeps infrastructure configuration version-controlled in Git/GitHub
-AWS's S3 documentation describes static website hosting as configuring a bucket for website hosting, setting an index document, permissions, and uploading the website content. citeturn0search1turn0search8
-🌐 Live Website
+<p align="center">
+  <img src="https://img.shields.io/badge/AWS-S3-orange?logo=amazonaws&logoColor=white" alt="AWS S3">
+  <img src="https://img.shields.io/badge/Terraform-IaC-7B42BC?logo=terraform&logoColor=white" alt="Terraform">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white" alt="HTML5">
+  <img src="https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white" alt="CSS3">
+  <img src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github&logoColor=white" alt="GitHub">
+</p>
+
+🚀 Project Overview
+This project demonstrates how to deploy a static HTML/CSS website to Amazon S3 and manage the complete infrastructure using Terraform.
+Instead of manually configuring the AWS Console every time, the required infrastructure is written as code. Terraform can then create, configure, update, and remove the resources in a repeatable way.
+✨ What this project does
+Feature	Description
+🪣 S3 Bucket	Hosts the static website
+🌐 Static Hosting	Configures S3 website hosting with index.html
+🔐 Bucket Policy	Allows public read access for website objects
+📤 File Upload	Terraform uploads HTML and CSS files
+⚙️ Infrastructure as Code	AWS infrastructure is managed through Terraform
+🔢 Variables	Region and bucket name are configurable
+📤 Outputs	Terraform generates the website endpoint
+🌱 Version Control	Project is maintained using Git and GitHub
+
+
+🌐 Live Demo
 👉 Open the Live Website
-AWS Region: ap-south-1 (Mumbai)
-The website is served directly through the Amazon S3 static website endpoint.
-⚠️ Note: S3 static website endpoints are HTTP endpoints. For a production website, AWS recommends a more secure architecture using CloudFront, which can provide HTTPS and keep S3 public access disabled. citeturn0search4turn0search8
+AWS Region: ap-south-1 — Mumbai
+The website is served directly from an Amazon S3 static website endpoint.
+⚠️ Note: The S3 website endpoint used in this project is HTTP. For a production application, a common improvement would be to place CloudFront in front of S3 to provide HTTPS and keep the S3 bucket private.
 
 🏗️ Architecture
+The architecture below is intentionally kept simple because it represents the actual deployment used in this project.
+
 ```mermaid
 flowchart LR
     A[👤 User / Browser] --> B[🌐 S3 Website Endpoint]
@@ -44,7 +57,7 @@ flowchart LR
 
     K[GitHub] --> F
 ```
-Simple request flow
+Simple Request Flow
 User
   ↓
 S3 Website Endpoint
@@ -56,14 +69,14 @@ index.html
 style.css
   ↓
 Website displayed in browser
-Terraform is used to define and manage the AWS infrastructure instead of manually configuring every setting through the AWS Console.
+Terraform is responsible for defining and managing the AWS infrastructure instead of manually configuring every setting through the AWS Console.
 🧠 How the Project Works
-The project has two main parts:
+The project has two main parts.
 1️⃣ Website
-The actual frontend is a simple static website made using:
-- HTML
-- CSS
-The files are located inside:
+The frontend is a simple static website built with:
+- HTML — website structure
+- CSS — website styling
+Files:
 website/
 ├── index.html
 └── style.css
@@ -82,10 +95,10 @@ Bucket Policy
 Website Files Uploaded
    ↓
 Live Website
-⚙️ How the Terraform Code Works
-The Terraform configuration is divided into small files so that the project is easier to understand and maintain.
-main.tf
-This is the main infrastructure file.
+⚙️ Terraform Configuration Explained
+The Terraform configuration is separated into small files so that each part has a clear responsibility.
+📄 main.tf
+main.tf contains the main AWS infrastructure.
 It defines:
 - AWS provider
 - S3 bucket
@@ -97,8 +110,9 @@ AWS Provider
 provider "aws" {
   region = var.aws_region
 }
-Instead of hardcoding the region, Terraform gets it from the variable:
+The AWS region is taken from the Terraform variable:
 var.aws_region
+This avoids hardcoding the region directly into the provider configuration.
 🪣 S3 Bucket
 resource "aws_s3_bucket" "website" {
   bucket = var.bucket_name
@@ -106,7 +120,7 @@ resource "aws_s3_bucket" "website" {
 This tells Terraform to manage the S3 bucket used for the website.
 The bucket name comes from:
 terraform.tfvars
-For example:
+Example:
 bucket_name = "rayyan-cloud-website-2026"
 🔓 Public Access Configuration
 resource "aws_s3_bucket_public_access_block" "website" {
@@ -117,9 +131,8 @@ resource "aws_s3_bucket_public_access_block" "website" {
   ignore_public_acls      = false
   restrict_public_buckets = false
 }
-For this learning project, these settings allow the S3 website content to be publicly accessible.
-This is required for the architecture used here because the S3 website endpoint serves publicly accessible website objects.
-🔐 For production workloads, avoid making S3 content publicly accessible when possible. A CloudFront distribution with Origin Access Control is a better secure architecture. citeturn0search8
+These settings are used because this learning project serves the website directly through the public S3 website endpoint.
+🔐 Security note: Public S3 access should be used carefully. For production workloads, a private S3 bucket behind CloudFront is a stronger architecture.
 
 🌍 Static Website Configuration
 resource "aws_s3_bucket_website_configuration" "website" {
@@ -129,11 +142,11 @@ resource "aws_s3_bucket_website_configuration" "website" {
     suffix = "index.html"
   }
 }
-This tells S3:
-"When someone opens the website, use index.html as the default page."
-
-Terraform's AWS provider recommends using the separate aws_s3_bucket_website_configuration resource for managing S3 website configuration. citeturn0search0
+This tells Amazon S3 to use:
+index.html
+as the default page when a visitor opens the website.
 📜 Bucket Policy
+The bucket policy allows visitors to read the website objects.
 resource "aws_s3_bucket_policy" "website" {
   bucket = aws_s3_bucket.website.id
 
@@ -153,14 +166,13 @@ resource "aws_s3_bucket_policy" "website" {
     ]
   })
 }
-This policy allows users to read the website objects from the S3 bucket.
-The important part is:
+The important permission is:
 s3:GetObject
-It means a visitor can retrieve objects such as:
+It allows a visitor's browser to retrieve objects such as:
 index.html
 style.css
 📤 Uploading Website Files
-Terraform also uploads the website files.
+Terraform also manages the website files stored inside S3.
 HTML
 resource "aws_s3_object" "index" {
   bucket       = aws_s3_bucket.website.id
@@ -175,11 +187,10 @@ resource "aws_s3_object" "css" {
   source       = "${path.module}/website/style.css"
   content_type = "text/css"
 }
-So Terraform does not only create the infrastructure — it also uploads the website files.
-The AWS Terraform provider supports aws_s3_object for uploading files into an S3 bucket. citeturn0search6
-🔢 Variables
-The project uses variables instead of hardcoding configuration.
+So Terraform is doing more than creating the infrastructure — it also uploads the website content.
+🔢 Terraform Variables
 variables.tf
+The project uses variables instead of hardcoding configuration.
 variable "aws_region" {
   description = "AWS region where the website will be deployed"
   type        = string
@@ -191,23 +202,23 @@ variable "bucket_name" {
   type        = string
 }
 This makes the Terraform configuration reusable.
-For example, another user can provide a different bucket name without changing main.tf.
+For example, another user can deploy the same project with a different bucket name without changing main.tf.
 📤 Terraform Output
-The project also generates the website URL automatically.
 outputs.tf
+The project generates the website endpoint automatically.
 output "website_endpoint" {
   description = "S3 static website endpoint"
   value = "http://${aws_s3_bucket.website.bucket}.s3-website.${var.aws_region}.amazonaws.com"
 }
 After:
 terraform apply
-Terraform displays:
+Terraform displays the endpoint:
 website_endpoint = "http://rayyan-cloud-website-2026.s3-website.ap-south-1.amazonaws.com"
 This makes it easy to find the deployed website after deployment.
 📁 Project Structure
 aws-s3-terraform-website/
 │
-├── website/
+├── 📁 website/
 │   ├── index.html
 │   └── style.css
 │
@@ -218,7 +229,6 @@ aws-s3-terraform-website/
 ├── .gitignore
 ├── .terraform.lock.hcl
 └── README.md
-File purpose
 File / Folder	Purpose
 website/index.html	Main website page
 website/style.css	Website styling
@@ -226,172 +236,185 @@ main.tf	AWS infrastructure
 variables.tf	Terraform variables
 terraform.tfvars	Environment-specific values
 outputs.tf	Deployment outputs
-.gitignore	Prevents Terraform state/config files from being committed
-.terraform.lock.hcl	Locks Terraform provider versions
+.gitignore	Prevents local Terraform files/config from being committed
+.terraform.lock.hcl	Locks provider dependency versions
 README.md	Project documentation
 
 
-🚀 Run This Project on Another Computer
-You can clone this project on another computer and deploy it from there.
-1. Install Terraform
-Install Terraform on the new computer.
-Verify:
-terraform version
-2. Install and Configure AWS CLI
-Install the AWS CLI and configure credentials:
+💻 Run This Project on Another Computer
+The project is designed so another developer can clone the repository and deploy the infrastructure from their own machine.
+Prerequisites
+Install:
+- Terraform
+- AWS CLI
+- Git
+- An AWS account with the required permissions
+1️⃣ Configure AWS CLI
+Run:
 aws configure
-Enter:
+Enter your AWS credentials and region:
 AWS Access Key ID
 AWS Secret Access Key
 Default region: ap-south-1
 Output format: json
-Verify the AWS identity:
+Verify the credentials:
 aws sts get-caller-identity
-🔐 Never put AWS access keys or secret keys inside GitHub, Terraform files, or the README.
+🔐 Never upload AWS access keys or secret keys to GitHub.
 
-3. Clone the Repository
+2️⃣ Clone the Repository
 git clone https://github.com/Rayyan87000/aws-s3-terraform-website.git
-Move into the project:
+Enter the project:
 cd aws-s3-terraform-website
-4. Create terraform.tfvars
+3️⃣ Create terraform.tfvars
 terraform.tfvars is intentionally excluded from Git because it contains environment-specific configuration.
 Create:
 terraform.tfvars
 Add:
 aws_region  = "ap-south-1"
 bucket_name = "your-unique-bucket-name"
-Important
+⚠️ Important
 S3 bucket names must be globally unique.
-For example:
+Example:
 bucket_name = "my-static-website-2026-12345"
-5. Initialize Terraform
+4️⃣ Initialize Terraform
 terraform init
-Terraform downloads the required AWS provider and prepares the project.
-6. Validate the Configuration
+Terraform downloads the required AWS provider and prepares the working directory.
+5️⃣ Validate the Configuration
 terraform validate
 Expected result:
 Success! The configuration is valid.
-7. Review the Infrastructure
+6️⃣ Review the Deployment
+Before creating anything, run:
 terraform plan
-This shows what Terraform is going to create or change before anything is deployed.
-8. Deploy the Website
+This lets you review what Terraform intends to create or change.
+7️⃣ Deploy
+Run:
 terraform apply
 Terraform will ask for confirmation.
 Type:
 yes
-Terraform will then:
-Create S3 bucket
-       ↓
-Configure public access settings
-       ↓
-Configure static website hosting
-       ↓
-Create bucket policy
-       ↓
+The deployment flow is:
+Create S3 Bucket
+      ↓
+Configure Public Access
+      ↓
+Configure Website Hosting
+      ↓
+Create Bucket Policy
+      ↓
 Upload index.html
-       ↓
+      ↓
 Upload style.css
-       ↓
-Generate website endpoint
-9. Open the Website
+      ↓
+Generate Website Endpoint
+8️⃣ Open the Website
 After deployment, Terraform prints:
 website_endpoint = ...
-Open that URL in your browser.
+Open that endpoint in your browser.
+🎉 Your website is now deployed.
 🔄 Updating the Website
-If you change:
+Modify:
 website/index.html
 or:
 website/style.css
-run:
+Then run:
 terraform apply
-Terraform compares the desired configuration with the current infrastructure and updates the required S3 objects.
-This is one of the main benefits of using Infrastructure as Code.
+Terraform compares the desired configuration with the existing infrastructure and updates the required resources/files.
+This is one of the main benefits of Infrastructure as Code.
 🧹 Destroy the Infrastructure
 When you no longer need the deployment:
 terraform destroy
 Terraform will show the resources that are going to be removed.
 Type:
 yes
-⚠️ terraform destroy is destructive. Do not run it against infrastructure you want to keep.
+⚠️ Warning: terraform destroy is destructive. Do not run it against infrastructure you want to keep.
 
-🛡️ Security Notes
+🛡️ Security Considerations
 This project intentionally uses public S3 website access because it demonstrates the classic S3 static website architecture.
-However, this should not automatically be copied to production.
-AWS recommends keeping S3 Block Public Access enabled whenever possible. For a secure production static website, a common architecture is:
+For a production application, a stronger architecture would be:
 User
   ↓
 HTTPS
   ↓
 CloudFront
   ↓
-S3 Bucket
-CloudFront can provide HTTPS while allowing the S3 bucket to remain private using Origin Access Control. citeturn0search8turn0search13
-🎯 What I Learned From This Project
-This project helped me practice:
+Private S3 Bucket
+This approach can provide:
+- 🔒 HTTPS
+- 🌍 Global content delivery
+- 🚫 Private S3 bucket
+- ⚡ Better caching and performance
+- 🛡️ Reduced direct exposure of the S3 bucket
+🎯 What I Practiced
+Through this project, I worked with:
 - ☁️ Amazon S3
-- 🏗️ Infrastructure as Code
 - ⚙️ Terraform
-- 🔐 AWS bucket policies
+- 🏗️ Infrastructure as Code
+- 🔐 S3 bucket policies
 - 🌐 Static website hosting
 - 📦 Terraform resources
 - 🔢 Terraform variables
 - 📤 Terraform outputs
 - 🖥️ AWS CLI
-- 🔄 Terraform plan/apply/destroy workflow
-- 🌱 Git and GitHub
+- 🔄 Terraform plan / apply / destroy
+- 🌱 Git
+- 💻 GitHub
 - 🔒 Basic AWS security concepts
-💡 Why Terraform Instead of Manual AWS Console Setup?
-Without Terraform:
-Open AWS Console
-     ↓
-Create S3 bucket
-     ↓
-Configure settings
-     ↓
-Configure website hosting
-     ↓
-Configure permissions
-     ↓
-Create policy
-     ↓
-Upload files
-     ↓
-Repeat manually next time
-With Terraform:
-Write Infrastructure Code
-          ↓
-     terraform plan
-          ↓
-     terraform apply
-          ↓
-      AWS Resources
-          ↓
-     Live Website
-The Terraform approach makes the infrastructure repeatable, version-controlled, and easier to reproduce.
-🧩 Technologies Used
-Technology	Usage
-Amazon S3	Static website hosting
-Terraform	Infrastructure as Code
-AWS CLI	AWS authentication and management
-HTML	Website structure
-CSS	Website styling
-Git	Version control
-GitHub	Source code hosting
+💡 Why Terraform Instead of Manual AWS Setup?
+❌ Manual approach
+AWS Console
+    ↓
+Create S3 Bucket
+    ↓
+Configure Settings
+    ↓
+Configure Website Hosting
+    ↓
+Configure Permissions
+    ↓
+Create Policy
+    ↓
+Upload Files
+    ↓
+Repeat Manually
+✅ Terraform approach
+Terraform Code
+      ↓
+terraform plan
+      ↓
+terraform apply
+      ↓
+AWS Infrastructure
+      ↓
+Live Website
+Terraform makes the infrastructure:
+Repeatable • Version Controlled • Reproducible • Easier to Maintain
+🧩 Tech Stack
+Technology	Purpose
+☁️ Amazon S3	Static website hosting
+⚙️ Terraform	Infrastructure as Code
+🖥️ AWS CLI	AWS authentication and management
+🌐 HTML5	Website structure
+🎨 CSS3	Website styling
+🌱 Git	Version control
+💻 GitHub	Source code hosting
 
 
 🔗 Project Links
-🌐 Live Website:
-http://rayyan-cloud-website-2026.s3-website.ap-south-1.amazonaws.com/
-💻 GitHub:
-https://github.com/Rayyan87000/aws-s3-terraform-website
+<p align="center">
+
+🌐 Live Website
+💻 GitHub Repository
+</p>
+
 👨‍💻 Author
 Rayyan Kaif Ansari
-Computer Science & Engineering
+Computer Science & Engineering Graduate
 Cloud / DevOps Enthusiast
-⭐ If you found this project useful
-Feel free to explore the repository and use the architecture as a starting point for learning AWS + Terraform.
-📚 References
-- Amazon S3 Static Website Hosting: https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html
-- Amazon S3 Website Hosting Tutorial: https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html
-- Terraform AWS Provider – S3 Bucket: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket
-- Terraform AWS Provider – S3 Object: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object
+<p align="center">
+  ⭐ <strong>If you found this project useful, feel free to explore the repository.</strong>
+</p>
+
+<p align="center">
+  Built with ☁️ AWS + ⚙️ Terraform + 💻 GitHub
+</p>
